@@ -1,14 +1,40 @@
 package br.com.fellipebetin.screenmatch.modelos;
 
-public class Titulo {
+import br.com.fellipebetin.screenmatch.excecao.ErrodeConversaoDeAnoException;
+
+public class Titulo implements Comparable<Titulo>{
     private String nome;
-    private int anoDeLancamento;
+	private int anoDeLancamento;
     private boolean incluidoNoPlano;
     private double somaDasAvaliacoes;
     private int totalDeAvaliacoes;
     private int duracaoEmMinutos;
+    
+    
 
-    public String getNome() {
+    public Titulo(String nome, int anoDeLancamento) {
+		this.nome = nome;
+		this.anoDeLancamento = anoDeLancamento;
+	}
+
+	public Titulo(TituloOmdb meuTituloOmdb) {
+		this.nome = meuTituloOmdb.title();
+		
+		//if (meuTituloOmdb.year().length() > 4) {
+		//	throw new ErrodeConversaoDeAnoException("Não foi possível converter o ano pois tem mais de quatro catacteres.");
+		//}
+		
+		this.anoDeLancamento = Integer.valueOf(meuTituloOmdb.year().substring(0,4));
+		if (meuTituloOmdb.runtime().equals(null)) {
+			this.duracaoEmMinutos = 0;
+		} else if (meuTituloOmdb.runtime().equals("N/A")) {
+			this.duracaoEmMinutos = 0;	
+		} else {
+			this.duracaoEmMinutos = Integer.valueOf(meuTituloOmdb.runtime().substring(0,3).trim());
+		}
+	}
+
+	public String getNome() {
         return nome;
     }
 
@@ -44,19 +70,31 @@ public class Titulo {
         this.duracaoEmMinutos = duracaoEmMinutos;
     }
 
-    void exibeFichaTecnica(){
+    public void exibeFichaTecnica(){
         System.out.println("Nome do filme: " + nome);
         System.out.println("Ano de lançamento: " + anoDeLancamento);
         System.out.println("Duração em minutos: " + duracaoEmMinutos);
         System.out.println("Incluído no plano: " + incluidoNoPlano);
     }
 
-    void avalia(double nota){
+    public void avalia(double nota){
         somaDasAvaliacoes += nota;
         totalDeAvaliacoes ++;
     }
 
-    double pegaMedia(){
+    public double pegaMedia(){
         return somaDasAvaliacoes / totalDeAvaliacoes;
     }
+
+	@Override
+	public int compareTo(Titulo outroTitulo) {
+		return this.getNome().compareTo(outroTitulo.getNome());
+	}
+
+	@Override
+	public String toString() {
+		return "(Nome = " + nome + ", Lançamento = " + anoDeLancamento + ", Duração = " + duracaoEmMinutos + ") ";
+	}
+	
+	
 }

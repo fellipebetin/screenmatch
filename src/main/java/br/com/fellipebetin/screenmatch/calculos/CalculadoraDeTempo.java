@@ -1,7 +1,5 @@
 package br.com.fellipebetin.screenmatch.calculos;
 
-import br.com.fellipebetin.screenmatch.modelos.Filme;
-import br.com.fellipebetin.screenmatch.modelos.Serie;
 import br.com.fellipebetin.screenmatch.modelos.Titulo;
 
 public class CalculadoraDeTempo {
